@@ -1,0 +1,241 @@
+<style>
+  /* --- HERO SECTION --- */
+  .hero-section {
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1595590424283-b8f17842773f?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    border-radius: 0 0 20px 20px;
+    margin-bottom: 60px;
+  }
+
+  .hero-content h1 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .hero-content p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    opacity: 0.9;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .btn-hero {
+    background: #e74c3c;
+    color: white;
+    padding: 15px 40px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 50px;
+    font-size: 18px;
+    transition: 0.3s;
+    text-transform: uppercase;
+  }
+
+  .btn-hero:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+  }
+
+  /* --- ПЕРЕВАГИ --- */
+  .features-section {
+    max-width: 1200px;
+    margin: 0 auto 80px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    padding: 0 20px;
+  }
+
+  .feature-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+  }
+
+  .feature-icon { font-size: 40px; margin-bottom: 15px; display: block; }
+  .feature-title { font-weight: bold; font-size: 18px; margin-bottom: 10px; }
+  .feature-desc { color: #666; font-size: 14px; line-height: 1.5; }
+
+  /* --- ЗАГОЛОВКИ СЕКЦІЙ --- */
+  .section-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .section-header h2 { font-size: 32px; font-weight: bold; margin-bottom: 10px; }
+  .section-header p { color: #777; }
+
+  /* --- КАТЕГОРІЇ --- */
+  .categories-grid {
+    max-width: 1200px;
+    margin: 0 auto 80px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 0 20px;
+  }
+  
+  .category-tile {
+    height: 250px;
+    background: #333;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .category-tile:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+  
+  /* --- НОВИНКИ (Стиль карток як в каталозі) --- */
+  .new-products-section {
+    max-width: 1200px;
+    margin: 0 auto 80px;
+    padding: 0 20px;
+  }
+  
+  .home-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 30px;
+  }
+
+  .product-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+
+  .product-image-wrap {
+    height: 250px;
+    width: 100%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-bottom: 1px solid #f5f5f5;
+  }
+
+  .p-img { width: 100%; height: 100%; object-fit: contain; padding: 10px; box-sizing: border-box; }
+  
+  .p-info { padding: 15px; text-align: center; }
+  .p-title { font-weight: bold; color: #333; text-decoration: none; display: block; margin-bottom: 10px; font-size: 16px; }
+  .p-price { color: #28a745; font-weight: bold; font-size: 18px; }
+
+</style>
+
+<section class="hero-section">
+  <div class="hero-content">
+    <h1>Професійне спорядження</h1>
+    <p>Найкраща якість для найскладніших завдань. Екіпірування, одяг та аксесуари від світових брендів.</p>
+    <%= link_to "Перейти до каталогу", products_path, class: "btn-hero" %>
+  </div>
+</section>
+
+<section class="features-section">
+  <div class="feature-card">
+    <span class="feature-icon">🚀</span>
+    <div class="feature-title">Швидка відправка</div>
+    <div class="feature-desc">Відправляємо замовлення в день оформлення. Доставка Новою Поштою за 1-2 дні.</div>
+  </div>
+  <div class="feature-card">
+    <span class="feature-icon">🛡️</span>
+    <div class="feature-title">Гарантія якості</div>
+    <div class="feature-desc">Тільки оригінальні товари від перевірених брендів (Mil-Tec, Pentagon, M-Tac).</div>
+  </div>
+  <div class="feature-card">
+    <span class="feature-icon">🔄</span>
+    <div class="feature-title">Легке повернення</div>
+    <div class="feature-desc">Не підійшов розмір? Обміняємо або повернемо кошти протягом 14 днів.</div>
+  </div>
+</section>
+
+<% if @main_categories.any? %>
+  <div class="section-header">
+    <h2>Популярні категорії</h2>
+    <p>Знайдіть те, що потрібно саме вам</p>
+  </div>
+  
+  <div class="categories-grid">
+    <% @main_categories.each_with_index do |cat, index| %>
+      <% gradient = case index % 3 
+         when 0 then "linear-gradient(45deg, #11998e, #38ef7d)"
+         when 1 then "linear-gradient(45deg, #2b5876, #4e4376)"
+         else "linear-gradient(45deg, #ff9966, #ff5e62)"
+         end 
+      %>
+      
+      <%= link_to products_path(category_id: cat.id), class: "category-tile", style: "background: #{gradient};" do %>
+        <span><%= cat.name %></span>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="section-header">
+  <h2>Нові надходження</h2>
+  <p>Свіжі товари в нашому асортименті</p>
+</div>
+
+<section class="new-products-section">
+  <div class="home-products-grid">
+    <% if @new_products.any? %>
+      <% @new_products.each do |product| %>
+        <div class="product-card">
+          <div class="product-image-wrap">
+            <% if product.images.attached? %>
+              <%= image_tag product.images[0], class: "p-img" %>
+            <% else %>
+              <span style="font-size: 40px; color: #eee;">📷</span>
+            <% end %>
+          </div>
+          
+          <div class="p-info">
+             <%= link_to product.name, product_path(product), class: "p-title" %>
+             <div class="p-price"><%= number_to_currency(product.price, unit: "₴", format: "%n %u", precision: 0) %></div>
+             
+             <div style="margin-top: 15px;">
+               <%= button_to cart_items_path(product_id: product.id), style: "width: 100%; background: black; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; font-weight: bold;" do %>
+                 В кошик
+               <% end %>
+             </div>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <p style="text-align: center; color: #777;">Товарів поки немає.</p>
+    <% end %>
+  </div>
+  
+  <div style="text-align: center; margin-top: 40px;">
+    <%= link_to "Дивитись всі товари", products_path, style: "display: inline-block; border: 2px solid black; color: black; padding: 10px 30px; text-decoration: none; font-weight: bold; border-radius: 30px; transition: 0.3s;" %>
+  </div>
+</section>

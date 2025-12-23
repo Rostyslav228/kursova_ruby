@@ -1,0 +1,75 @@
+<div style="max-width: 800px; margin: 40px auto; padding: 30px; background: white; border: 1px solid #eee; box-shadow: 0 0 20px rgba(0,0,0,0.05); font-family: sans-serif;">
+  
+  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; margin-bottom: 30px;">
+    <div>
+      <h1 style="margin: 0; font-size: 24px;">Замовлення #<%= @order.id %></h1>
+      <div style="color: #777; margin-top: 5px;">від <%= @order.created_at.strftime("%d.%m.%Y %H:%M") %></div>
+    </div>
+    <div style="text-align: right;">
+      <span style="background: #e8f5e9; color: #2e7d32; padding: 5px 15px; border-radius: 20px; font-weight: bold; border: 1px solid #c8e6c9;">
+        <%= @order.status %>
+      </span>
+    </div>
+  </div>
+
+  <div style="display: flex; gap: 40px; margin-bottom: 40px;">
+    <div style="flex: 1;">
+      <h3 style="margin-top: 0; color: #333; border-bottom: 1px solid #eee; padding-bottom: 10px;">👤 Дані отримувача</h3>
+      <p><strong>Ім'я:</strong> <%= @order.first_name %> <%= @order.last_name %></p>
+      <p><strong>Телефон:</strong> <%= @order.phone %></p>
+    </div>
+    <div style="flex: 1;">
+      <h3 style="margin-top: 0; color: #333; border-bottom: 1px solid #eee; padding-bottom: 10px;">🚚 Доставка та Оплата</h3>
+      <p><strong>Місто:</strong> <%= @order.city %></p>
+      <p><strong>Адреса:</strong> <%= @order.address %></p>
+      <p><strong>Доставка:</strong> <%= @order.shipping_method %></p>
+      <p><strong>Оплата:</strong> <%= @order.payment_method %></p>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom: 15px;">🛒 Товари в замовленні</h3>
+  <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+    <thead>
+      <tr style="background: #f9f9f9; text-align: left;">
+        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Товар</th>
+        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Ціна</th>
+        <th style="padding: 10px; border-bottom: 1px solid #ddd;">К-сть</th>
+        <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: right;">Сума</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @order.order_items.each do |item| %>
+        <tr>
+          <td style="padding: 10px; border-bottom: 1px solid #eee;">
+            <%= link_to item.product.name, product_path(item.product), style: "text-decoration: none; color: #333; font-weight: bold;" %>
+          </td>
+          <td style="padding: 10px; border-bottom: 1px solid #eee;"><%= item.price %> ₴</td>
+          <td style="padding: 10px; border-bottom: 1px solid #eee;"><%= item.quantity %></td>
+          <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;"><%= item.price * item.quantity %> ₴</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div style="text-align: right; font-size: 20px; font-weight: bold; margin-bottom: 30px;">
+    Всього до сплати: <span style="color: #28a745; font-size: 28px;"><%= @order.total_price %> ₴</span>
+  </div>
+<% if @order.rating.present? %>
+    <div style="margin-top: 40px; padding: 20px; background: #fffbe6; border: 1px solid #ffe58f; border-radius: 8px;">
+      <h3 style="margin-top: 0; color: #d48806;">Ваш відгук про замовлення</h3>
+      <div style="font-size: 24px; color: #ffc107; margin-bottom: 10px;">
+        <% @order.rating.times do %>★<% end %><% (5 - @order.rating).times do %>☆<% end %>
+      </div>
+      <% if @order.review.present? %>
+        <p style="color: #333; font-style: italic;">"<%= @order.review %>"</p>
+      <% else %>
+        <p style="color: #777; font-size: 14px;">Без текстового коментаря.</p>
+      <% end %>
+    </div>
+  <% end %>
+  <div style="border-top: 2px solid #f0f0f0; padding-top: 20px; text-align: center;">
+    <%= link_to "← Повернутися в кабінет", dashboard_path, style: "text-decoration: none; color: #666; margin-right: 20px;" %>
+    <%= link_to "На головну", root_path, style: "background: black; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;" %>
+  </div>
+
+</div>

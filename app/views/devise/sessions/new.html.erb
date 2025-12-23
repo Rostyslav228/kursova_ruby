@@ -1,0 +1,119 @@
+<style>
+  .auth-wrapper {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f4f4f4;
+    padding: 20px;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .auth-card {
+    background: white;
+    width: 100%;
+    max-width: 420px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  }
+
+  .auth-header { text-align: center; margin-bottom: 30px; }
+  .auth-header h2 { font-size: 26px; font-weight: 800; margin: 0 0 10px; color: #333; }
+  .auth-header p { color: #777; font-size: 14px; margin: 0; }
+
+  .form-group { margin-bottom: 20px; }
+  .form-label { display: block; font-weight: 600; margin-bottom: 8px; color: #444; font-size: 14px; }
+  
+  .form-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: 0.2s;
+    box-sizing: border-box;
+    background: #fafafa;
+  }
+  .form-input:focus { border-color: #000; outline: none; background: white; }
+
+  .auth-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 13px;
+  }
+  
+  .remember-me { display: flex; align-items: center; gap: 8px; cursor: pointer; color: #666; }
+  .forgot-password { color: #555; text-decoration: none; }
+  .forgot-password:hover { text-decoration: underline; }
+
+  .btn-auth {
+    width: 100%;
+    background: black;
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .btn-auth:hover { background: #333; transform: translateY(-1px); }
+
+  .auth-footer { text-align: center; margin-top: 25px; font-size: 14px; color: #666; }
+  .auth-footer a { color: black; font-weight: bold; text-decoration: none; }
+  .auth-footer a:hover { text-decoration: underline; }
+</style>
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h2>З поверненням! 👋</h2>
+      <p>Введіть свої дані для входу</p>
+    </div>
+
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      
+      <% if flash[:alert] %>
+        <div style="background: #fff5f5; color: #c53030; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 20px; text-align: center;">
+          <%= flash[:alert] %>
+        </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :phone, "Номер телефону", class: "form-label" %>
+        <%= f.text_field :phone, autofocus: true, class: "form-input", placeholder: "067 123 45 67" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password, "Пароль", class: "form-label" %>
+        <%= f.password_field :password, autocomplete: "current-password", class: "form-input", placeholder: "••••••••" %>
+      </div>
+
+      <% if devise_mapping.rememberable? %>
+        <div class="auth-actions">
+          <label class="remember-me">
+            <%= f.check_box :remember_me %>
+            <span>Запам'ятати мене</span>
+          </label>
+          
+          <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+            <%= link_to "Забули пароль?", new_password_path(resource_name), class: "forgot-password" %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <%= f.submit "Увійти", class: "btn-auth" %>
+    <% end %>
+
+    <div class="auth-footer">
+      Ще не маєте акаунту? 
+      <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+        <%= link_to "Зареєструватися", new_registration_path(resource_name) %>
+      <% end %>
+    </div>
+  </div>
+</div>

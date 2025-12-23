@@ -1,0 +1,58 @@
+<h2>Редагування профілю</h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field" style="margin-bottom: 15px;">
+    <%= f.label :full_name, "ПІБ" %><br />
+    <%= f.text_field :full_name, autofocus: true, autocomplete: "name", placeholder: "Шевченко Тарас" %>
+  </div>
+
+  <div class="field" style="margin-bottom: 15px;">
+    <%= f.label :phone_number, "Номер телефону" %><br />
+    <%= f.text_field :phone_number, autocomplete: "tel", placeholder: "099 123 45 67" %>
+  </div>
+
+  <div class="field" style="margin-bottom: 15px;">
+    <%= f.label :email, "Електронна пошта" %><br />
+    <%= f.email_field :email, autocomplete: "email" %>
+  </div>
+
+  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+    <div>Наразі очікується підтвердження для: <%= resource.unconfirmed_email %></div>
+  <% end %>
+
+  <hr>
+  <p><strong>Зміна пароля</strong> (залиште пустим, якщо не хочете змінювати)</p>
+
+  <div class="field">
+    <%= f.label :password, "Новий пароль" %> <br />
+    <%= f.password_field :password, autocomplete: "new-password" %>
+    <% if @minimum_password_length %>
+      <em style="font-size: small;">(мінімум <%= @minimum_password_length %> символів)</em>
+    <% end %>
+  </div>
+
+  <div class="field" style="margin-bottom: 15px;">
+    <%= f.label :password_confirmation, "Підтвердіть новий пароль" %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <hr>
+  
+  <div class="field" style="margin-bottom: 20px; background-color: #f9f9f9; padding: 10px; border: 1px solid #ddd;">
+    <%= f.label :current_password, "Введіть поточний пароль, щоб зберегти зміни" %> <br />
+    <%= f.password_field :current_password, autocomplete: "current-password" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Оновити профіль", style: "padding: 10px 20px; background: green; color: white; border: none; cursor: pointer;" %>
+  </div>
+<% end %>
+
+<h3 style="margin-top: 30px;">Видалити акаунт</h3>
+<div>
+  <%= button_to "Видалити мій акаунт", registration_path(resource_name), data: { confirm: "Ви впевнені?", turbo_confirm: "Ви впевнені?" }, method: :delete, style: "background: red; color: white; border: none; padding: 5px 10px;" %>
+</div>
+
+<%= link_to "Назад", :back, style: "display: block; margin-top: 20px;" %>

@@ -1,0 +1,52 @@
+<style>
+  .product-container { max-width: 1000px; margin: 40px auto; padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; font-family: sans-serif; }
+  .gallery { display: flex; flex-direction: column; gap: 10px; }
+  .main-image { width: 100%; height: 400px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; }
+  .thumbnails { display: flex; gap: 10px; overflow-x: auto; }
+  .thumb { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; cursor: pointer; opacity: 0.6; transition: 0.3s; }
+  .thumb:hover { opacity: 1; }
+  .product-details h1 { margin-top: 0; }
+  .price { font-size: 28px; color: #28a745; font-weight: bold; margin: 20px 0; }
+  .desc { line-height: 1.6; color: #555; }
+  .btn-buy { background: black; color: white; border: none; padding: 15px 30px; font-size: 18px; cursor: pointer; border-radius: 6px; }
+  .back-link { display: inline-block; margin-top: 20px; color: #666; text-decoration: none; }
+</style>
+
+<div class="product-container">
+  
+  <div class="gallery">
+    <% if @product.images.attached? %>
+      <%= image_tag @product.images[0], class: "main-image", id: "mainImage" %>
+      
+      <div class="thumbnails">
+        <% @product.images.each do |img| %>
+          <%= image_tag img, class: "thumb", onclick: "document.getElementById('mainImage').src=this.src" %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="main-image" style="display: flex; align-items: center; justify-content: center; background: #f9f9f9; color: #ccc;">Немає фото</div>
+    <% end %>
+  </div>
+
+  <div class="product-details">
+    <h1><%= @product.name %></h1>
+    <p style="color: #888;">Категорія: <%= @product.category&.name || "Не вказано" %></p>
+    
+    <div class="price"><%= number_to_currency(@product.price, unit: "₴", format: "%n %u", precision: 0) %></div>
+    
+    <button class="btn-buy">Купити</button>
+
+    <h3>Опис</h3>
+    <div class="desc"><%= simple_format(@product.description) %></div>
+
+    <% if current_user&.admin? %>
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+        <%= link_to "✏️ Редагувати", edit_product_path(@product), style: "margin-right: 15px;" %>
+        <%= link_to "🗑️ Видалити", product_path(@product), data: { turbo_method: :delete, turbo_confirm: "Точно видалити?" }, style: "color: red;" %>
+      </div>
+    <% end %>
+
+    <%= link_to "← Назад до каталогу", products_path, class: "back-link" %>
+  </div>
+
+</div>

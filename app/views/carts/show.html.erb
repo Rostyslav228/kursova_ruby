@@ -1,0 +1,81 @@
+<div style="max-width: 1100px; margin: 40px auto; padding: 0 20px; font-family: sans-serif;">
+  <h1 style="margin-bottom: 30px;">🛒 КОШИК (<%= @cart.cart_items.sum(:quantity) %>)</h1>
+
+  <% if @cart.cart_items.any? %>
+    <div style="display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap;">
+      
+      <div style="flex: 2; min-width: 300px;">
+        <div style="text-align: right; margin-bottom: 10px;">
+          <%= button_to "🗑 Очистити кошик", cart_path(@cart), method: :delete, style: "background: none; border: none; color: #666; cursor: pointer; text-decoration: underline;" %>
+        </div>
+
+        <% @cart.cart_items.each do |item| %>
+          <div style="display: flex; align-items: center; border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 8px; background: white;">
+            
+            <div style="width: 80px; height: 80px; flex-shrink: 0; background: #f9f9f9; display: flex; align-items: center; justify-content: center; margin-right: 20px; border-radius: 4px; overflow: hidden;">
+               <% if item.product.images.attached? %>
+                 <%= image_tag item.product.images[0], style: "width: 100%; height: 100%; object-fit: cover;" %>
+               <% else %>
+                 <span style="font-size: 24px;">📷</span>
+               <% end %>
+            </div>
+
+            <div style="flex: 1;">
+              <strong style="font-size: 16px;"><%= link_to item.product.name, product_path(item.product), style: "color: #333; text-decoration: none;" %></strong>
+              <div style="font-size: 12px; color: #28a745; margin-top: 5px;">✔ Є в наявності</div>
+            </div>
+
+            <div style="margin: 0 20px;">
+              <%= form_with model: item, url: cart_item_path(item), method: :patch, local: true do |f| %>
+                <%= f.number_field :quantity, 
+                    value: item.quantity, 
+                    min: 1, 
+                    style: "width: 60px; padding: 8px; text-align: center; border: 1px solid #ddd; border-radius: 4px; font-weight: bold;",
+                    onchange: "this.form.requestSubmit()" 
+                %>
+              <% end %>
+            </div>
+
+            <div style="font-weight: bold; font-size: 18px; min-width: 100px; text-align: right;">
+              <%= item.total_price %> ₴
+            </div>
+
+            <div style="margin-left: 20px;">
+               <%= button_to "×", cart_item_path(item), method: :delete, style: "color: #e74c3c; background: none; border: none; font-size: 24px; cursor: pointer; padding: 0 10px;" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div style="flex: 1; min-width: 300px; border: 1px solid #eee; padding: 25px; border-radius: 8px; background: #fafafa; position: sticky; top: 20px;">
+        <h3 style="margin-top: 0; border-bottom: 1px solid #ddd; padding-bottom: 15px;">ПІДСУМОК</h3>
+        
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px; color: #555; margin-top: 20px;">
+          <span>Вартість товарів:</span>
+          <strong><%= @cart.total_price %> ₴</strong>
+        </div>
+
+        <div style="margin-top: 20px; font-size: 24px; font-weight: bold; display: flex; justify-content: space-between; border-top: 2px solid #ddd; padding-top: 20px;">
+          <span>До сплати:</span>
+          <span style="color: #28a745;"><%= @cart.total_price %> ₴</span>
+        </div>
+
+        <div style="margin-top: 30px;">
+          <%= link_to "ОФОРМИТИ ЗАМОВЛЕННЯ", new_order_path, style: "display: block; width: 100%; background: black; color: white; text-align: center; padding: 15px; text-decoration: none; font-weight: bold; border-radius: 6px; box-sizing: border-box; transition: 0.3s;" %>
+          
+          <div style="text-align: center; margin-top: 15px;">
+             <%= link_to "Продовжити покупки", products_path, style: "color: #666; font-size: 14px;" %>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  <% else %>
+    <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 8px; border: 1px solid #eee;">
+      <div style="font-size: 60px; margin-bottom: 20px;">🛒</div>
+      <h2 style="color: #333;">Ваш кошик порожній</h2>
+      <p style="color: #777; margin-bottom: 30px;">Але це легко виправити! Перегляньте наш каталог.</p>
+      <%= link_to "Перейти до каталогу", products_path, style: "display: inline-block; background: black; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold;" %>
+    </div>
+  <% end %>
+</div>

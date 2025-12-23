@@ -1,0 +1,239 @@
+<div style="max-width: 600px; margin: 40px auto; padding: 30px; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); font-family: sans-serif;">
+  <h2 style="text-align: center; margin-bottom: 30px;">✏️ Редагування замовлення #<%= @order.id %></h2>
+
+  <%= form_with model: @order, local: true do |f| %>
+    
+    <% if @order.errors.any? %>
+      <div style="color: red; margin-bottom: 20px;">
+        <ul>
+          <% @order.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <h3 style="border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px;">Дані отримувача</h3>
+    
+    <div style="margin-bottom: 15px;">
+      <label style="display: block; margin-bottom: 5px; font-weight: bold;">Ім'я</label>
+      <%= f.text_field :first_name, class: "styled-input", style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" %>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label style="display: block; margin-bottom: 5px; font-weight: bold;">Прізвище</label>
+      <%= f.text_field :last_name, class: "styled-input", style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" %>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label style="display: block; margin-bottom: 5px; font-weight: bold;">Телефон</label>
+      <%= f.text_field :phone, class: "styled-input", style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" %>
+    </div>
+
+    <h3 style="border-bottom: 1px solid #eee; padding-bottom: 10px; margin: 30px 0 20px;">Доставка (Нова Пошта)</h3>
+
+    <div style="margin-bottom: 15px; position: relative;">
+      <label style="display: block; margin-bottom: 5px; font-weight: bold;">Місто</label>
+      <%= f.text_field :city, id: "city-search", class: "styled-input", placeholder: "Введіть назву міста...", autocomplete: "off", style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" %>
+      <input type="hidden" id="city-ref">
+      <ul id="city-suggestions" class="suggestions-list"></ul>
+    </div>
+
+    <div style="margin-bottom: 15px; position: relative;">
+      <label style="display: block; margin-bottom: 5px; font-weight: bold;">Відділення / Поштомат</label>
+      <%= f.text_field :address, id: "warehouse-search", class: "styled-input", placeholder: "Спочатку оберіть місто...", autocomplete: "off", style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" %>
+      <ul id="warehouse-suggestions" class="suggestions-list"></ul>
+    </div>
+
+    <h3 style="border-bottom: 1px solid #eee; padding-bottom: 10px; margin: 30px 0 20px;">📦 Склад замовлення</h3>
+
+    <div style="background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
+      <%= f.fields_for :order_items do |item_form| %>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #ddd;">
+          
+          <div style="flex: 2;">
+            <strong><%= item_form.object.product.name %></strong>
+            <div style="font-size: 12px; color: #777;">Ціна: <%= item_form.object.price %> ₴</div>
+          </div>
+
+          <div style="flex: 1; text-align: center;">
+            <label style="font-size: 12px; display: block; margin-bottom: 2px;">Кількість:</label>
+            <%= item_form.number_field :quantity, min: 1, style: "width: 60px; padding: 5px; text-align: center; border: 1px solid #ccc; border-radius: 4px;" %>
+          </div>
+
+          <div style="flex: 1; text-align: right;">
+            <label style="font-size: 12px; color: #d9534f; cursor: pointer; display: flex; align-items: center; justify-content: flex-end; gap: 5px;">
+              <%= item_form.check_box :_destroy %> Видалити
+            </label>
+          </div>
+          
+        </div>
+      <% end %>
+      
+      <p style="font-size: 12px; color: #666; margin-top: 10px; text-align: center;">
+        ℹ️ Загальна сума перерахується автоматично після збереження.
+      </p>
+    </div>
+
+    <div style="margin-top: 30px; display: flex; gap: 10px;">
+      <%= f.submit "Зберегти зміни", style: "flex: 1; background: black; color: white; padding: 15px; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;" %>
+      <%= link_to "Скасувати", dashboard_path, style: "padding: 15px 20px; background: #eee; color: #333; text-decoration: none; border-radius: 6px;" %>
+    </div>
+
+  <% end %>
+</div>
+
+<style>
+  .suggestions-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: none;
+  }
+  .suggestions-list li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+  }
+  .suggestions-list li:hover {
+    background-color: #f8f9fa;
+  }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const apiKey = "bd75fb4e41423c9235cb582d02c51084"; // Демо-ключ. Замініть на свій, якщо перестане працювати.
+  
+  const cityInput = document.getElementById('city-search');
+  const citySuggestions = document.getElementById('city-suggestions');
+  const cityRefInput = document.getElementById('city-ref');
+  
+  const warehouseInput = document.getElementById('warehouse-search');
+  const warehouseSuggestions = document.getElementById('warehouse-suggestions');
+
+  // --- 1. ПОШУК МІСТА ---
+  cityInput.addEventListener('input', function() {
+    const query = cityInput.value;
+    if (query.length < 2) { 
+      citySuggestions.style.display = 'none'; 
+      return; 
+    }
+
+    // Запит до Нової Пошти (searchSettlements)
+    fetch('https://api.novaposhta.ua/v2.0/json/', {
+      method: 'POST',
+      body: JSON.stringify({
+        apiKey: apiKey,
+        modelName: "Address",
+        calledMethod: "searchSettlements",
+        methodProperties: {
+          CityName: query,
+          Limit: "10",
+          Page: "1"
+        }
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      citySuggestions.innerHTML = '';
+      if (data.success && data.data[0].Addresses.length > 0) {
+        citySuggestions.style.display = 'block';
+        
+        data.data[0].Addresses.forEach(item => {
+          const li = document.createElement('li');
+          // Формуємо назву: "Київ (Київська обл.)"
+          li.textContent = `${item.Present}`;
+          
+          li.onclick = function() {
+            cityInput.value = item.MainDescription; // Вставляємо назву
+            cityRefInput.value = item.DeliveryCity; // Зберігаємо REF міста для пошуку відділень
+            citySuggestions.style.display = 'none';
+            
+            // Очищаємо поле відділення, бо місто змінилось
+            warehouseInput.value = '';
+            warehouseInput.placeholder = "Тепер оберіть відділення...";
+            warehouseInput.disabled = false;
+            
+            // Одразу підвантажуємо відділення (опціонально)
+            loadWarehouses(item.DeliveryCity, '');
+          };
+          citySuggestions.appendChild(li);
+        });
+      } else {
+        citySuggestions.style.display = 'none';
+      }
+    });
+  });
+
+  // --- 2. ПОШУК ВІДДІЛЕННЯ ---
+  warehouseInput.addEventListener('focus', function() {
+      // Якщо місто вже обране, показуємо список одразу при кліку
+      if (cityRefInput.value) {
+          loadWarehouses(cityRefInput.value, warehouseInput.value);
+      } else {
+          warehouseInput.placeholder = "Спочатку оберіть місто!";
+      }
+  });
+
+  warehouseInput.addEventListener('input', function() {
+    if (!cityRefInput.value) return; // Без міста не шукаємо
+    loadWarehouses(cityRefInput.value, warehouseInput.value);
+  });
+
+  function loadWarehouses(cityRef, query) {
+    fetch('https://api.novaposhta.ua/v2.0/json/', {
+      method: 'POST',
+      body: JSON.stringify({
+        apiKey: apiKey,
+        modelName: "Address",
+        calledMethod: "getWarehouses",
+        methodProperties: {
+          CityRef: cityRef,
+          FindByString: query, // Фільтр по номеру або назві вулиці
+          Limit: "20",
+          Page: "1"
+        }
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      warehouseSuggestions.innerHTML = '';
+      if (data.success && data.data.length > 0) {
+        warehouseSuggestions.style.display = 'block';
+        
+        data.data.forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item.Description; // Наприклад: "Відділення №1: вул. ... "
+          
+          li.onclick = function() {
+            warehouseInput.value = item.Description;
+            warehouseSuggestions.style.display = 'none';
+          };
+          warehouseSuggestions.appendChild(li);
+        });
+      } else {
+        warehouseSuggestions.style.display = 'none';
+      }
+    });
+  }
+
+  // Закриття списків при кліку поза ними
+  document.addEventListener('click', e => {
+    if (e.target !== cityInput) citySuggestions.style.display = 'none';
+    if (e.target !== warehouseInput) warehouseSuggestions.style.display = 'none';
+  });
+});
+</script>

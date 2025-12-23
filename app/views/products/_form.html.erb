@@ -1,0 +1,228 @@
+<style>
+  .product-form-card {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .form-section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    margin-top: 30px;
+  }
+  
+  .form-section-title:first-child { margin-top: 0; }
+
+  .form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #444;
+    font-size: 14px;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: #000;
+    outline: none;
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .file-upload-box {
+    border: 2px dashed #ddd;
+    padding: 30px;
+    text-align: center;
+    border-radius: 8px;
+    background: #fafafa;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  .file-upload-box:hover {
+    background: #f0f0f0;
+    border-color: #bbb;
+  }
+
+  .current-images {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+  }
+
+  .img-preview {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+  }
+
+  .btn-submit {
+    background: #000;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s;
+  }
+
+  .btn-submit:hover {
+    background: #333;
+  }
+  
+  .btn-cancel {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .btn-cancel:hover { text-decoration: underline; }
+</style>
+
+<div class="product-form-card">
+  
+  <%= form_with(model: product, local: true) do |form| %>
+    
+    <% if product.errors.any? %>
+      <div style="background: #fff5f5; border-left: 4px solid #fc8181; padding: 15px; margin-bottom: 30px;">
+        <h4 style="margin: 0 0 10px 0; color: #c53030;">Виникли помилки при збереженні:</h4>
+        <ul style="margin: 0; padding-left: 20px; color: #c53030;">
+          <% product.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-section-title">📝 Основна інформація</div>
+
+    <div class="form-group">
+      <%= form.label :name, "Назва товару", class: "form-label" %>
+      <%= form.text_field :name, placeholder: "Наприклад: Куртка Pentagon Parka", class: "form-input" %>
+    </div>
+
+    <div class="form-group">
+      <% if defined?(Category) %>
+        <%= form.label :category_id, "Категорія", class: "form-label" %>
+        <%= form.collection_select :category_id, Category.all, :id, :name, { prompt: "Оберіть категорію..." }, { class: "form-select" } %>
+      <% end %>
+    </div>
+
+    <div class="form-section-title">🏷️ Деталі продукту</div>
+
+    <div class="form-grid-2">
+      <div class="form-group">
+        <%= form.label :brand, "Бренд", class: "form-label" %>
+        <%= form.text_field :brand, placeholder: "Наприклад: Pentagon", class: "form-input" %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :sizes, "Розміри (через кому)", class: "form-label" %>
+        <%= form.text_field :sizes, placeholder: "S, M, L, XL, XXL", class: "form-input" %>
+      </div>
+    </div>
+
+    <div class="form-section-title">💰 Ціноутворення</div>
+
+    <div class="form-grid-2">
+      <div class="form-group">
+        <%= form.label :price, "Поточна ціна (₴)", class: "form-label" %>
+        <%= form.number_field :price, step: 0.01, placeholder: "0.00", class: "form-input" %>
+      </div>
+      
+      <div class="form-group">
+        <%= form.label :old_price, "Стара ціна (для знижки)", class: "form-label" %>
+        <%= form.number_field :old_price, step: 0.01, placeholder: "Необов'язково", class: "form-input" %>
+      </div>
+    </div>
+
+    <div class="form-section-title">📦 Склад та Опис</div>
+
+    <div class="form-group">
+      <%= form.label :quantity, "Кількість на складі (шт)", class: "form-label" %>
+      <%= form.number_field :quantity, placeholder: "Наприклад: 100", class: "form-input", style: "max-width: 200px;" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :description, "Опис товару", class: "form-label" %>
+      <%= form.text_area :description, placeholder: "Детальний опис характеристик...", class: "form-textarea", rows: 6 %>
+    </div>
+
+    <div class="form-section-title">📷 Медіа</div>
+
+    <div class="form-group">
+      <%= form.label :images, "Завантажити фото", class: "form-label" %>
+      
+      <div class="file-upload-box" onclick="document.getElementById('product_images').click()">
+        <span style="font-size: 24px;">☁️</span><br>
+        <span style="color: #666; font-size: 14px;">Натисніть сюди, щоб обрати файли</span>
+        <%= form.file_field :images, multiple: true, style: "display: none;", id: "product_images", onchange: "updateFileList(this)" %>
+      </div>
+      <div id="file-list-text" style="font-size: 12px; color: #888; margin-top: 5px; text-align: center;"></div>
+
+      <% if product.images.attached? %>
+        <p style="font-size: 12px; color: #666; margin-top: 15px; font-weight: bold;">Поточні фото:</p>
+        <div class="current-images">
+          <% product.images.each do |image| %>
+            <%= image_tag image, class: "img-preview" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <div style="margin-top: 40px;">
+      <%= form.submit "Зберегти товар", class: "btn-submit" %>
+      <%= link_to "Скасувати та повернутись назад", products_path, class: "btn-cancel" %>
+    </div>
+
+  <% end %> </div>
+
+<script>
+  function updateFileList(input) {
+    const output = document.getElementById('file-list-text');
+    if (input.files.length > 0) {
+      output.innerText = `Обрано файлів: ${input.files.length}`;
+    } else {
+      output.innerText = '';
+    }
+  }
+</script>

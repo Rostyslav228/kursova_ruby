@@ -1,0 +1,67 @@
+<div style="max-width: 900px; margin: 40px auto; padding: 0 20px; font-family: sans-serif;">
+  <h1 style="text-align: center; margin-bottom: 40px;">ОФОРМЛЕННЯ ЗАМОВЛЕННЯ</h1>
+
+  <%= form_with model: @order, url: orders_path, local: true, style: "display: flex; gap: 40px; flex-wrap: wrap;" do |f| %>
+    
+    <div style="flex: 1; min-width: 300px;">
+      
+      <h3 style="border-bottom: 1px solid #eee; padding-bottom: 10px;">АДРЕСА ДОСТАВКИ / ДАНІ ОТРИМУВАЧА</h3>
+      
+      <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <%= f.text_field :first_name, placeholder: "* Ім'я", required: true, style: "flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" %>
+        <%= f.text_field :last_name, placeholder: "* Прізвище", required: true, style: "flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" %>
+      </div>
+
+      <div style="margin-bottom: 15px;">
+        <%= f.text_field :phone, placeholder: "* Номер телефону (+380...)", required: true, style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;" %>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <%= f.text_field :city, placeholder: "* Місто", required: true, style: "flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" %>
+        <%= f.text_field :address, placeholder: "* Відділення НП або адреса", required: true, style: "flex: 2; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" %>
+      </div>
+
+    </div>
+
+    <div style="flex: 1; min-width: 300px;">
+      
+      <h3 style="border-bottom: 1px solid #eee; padding-bottom: 10px;">СПОСІБ ДОСТАВКИ</h3>
+      
+      <div style="margin-bottom: 20px;">
+        <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer;">
+          <%= f.radio_button :shipping_method, "Нова Пошта", checked: true %> 
+          <span>🔴 Відділення Нової Пошти (за тарифами перевізника)</span>
+        </label>
+        
+        <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer;">
+           <%= f.radio_button :shipping_method, "Укрпошта" %> 
+           <span>🟡 Укрпошта Експрес</span>
+        </label>
+      </div>
+
+      <h3 style="border-bottom: 1px solid #eee; padding-bottom: 10px; margin-top: 30px;">СПОСІБ ОПЛАТИ</h3>
+      
+      <div style="margin-bottom: 20px;">
+        <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer;">
+           <%= f.radio_button :payment_method, "При отриманні", checked: true %> 
+           <span>💵 Оплата при отриманні (післяплата)</span>
+        </label>
+        
+        <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer;">
+           <%= f.radio_button :payment_method, "Карта" %> 
+           <span>💳 Банківська картка / Google Pay</span>
+        </label>
+      </div>
+
+      <div style="margin-top: 40px; border-top: 2px solid #eee; padding-top: 20px;">
+         <div style="display: flex; justify-content: space-between; font-size: 20px; font-weight: bold; margin-bottom: 20px;">
+           <span>До сплати:</span>
+           <span><%= @cart.total_price %> грн</span>
+         </div>
+         
+         <%= f.submit "ПІДТВЕРДИТИ ЗАМОВЛЕННЯ", style: "width: 100%; background: #28a745; color: white; padding: 15px; border: none; font-size: 18px; font-weight: bold; cursor: pointer; border-radius: 4px;" %>
+      </div>
+
+    </div>
+  <% end %>
+</div>
